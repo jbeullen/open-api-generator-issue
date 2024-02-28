@@ -1,0 +1,66 @@
+openapi: 3.0.3
+info:
+  title: Animal API
+  version: 1.0.0
+  description: API for managing animals
+paths:
+  /animals:
+    post:
+      summary: Create a new animal
+      operationId: createAnimal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Animal'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+        '400':
+          description: Bad request
+components:
+  schemas:
+    Animal:
+      type: object
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+        # Add more properties as needed
+      example:
+        name: Buddy
+        species: Dog
+      discriminator:
+        propertyName: species
+        mapping:
+          Dog: '#/components/schemas/Dog'
+          Cat: '#/components/schemas/Cat'
+          Tiger: '#/components/schemas/Cat'  # Map Tiger to Cat schema
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/Animal'
+        - type: object
+          properties:
+            breed:
+              type: string
+          example:
+            name: Max
+            species: Dog
+            breed: Labrador
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/Animal'
+        - type: object
+          properties:
+            color:
+              type: string
+          example:
+            name: Whiskers
+            species: Cat
+            color: White
