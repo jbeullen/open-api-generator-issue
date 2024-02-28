@@ -24,4 +24,15 @@ public class MapMultipleSpeciesToCatTest {
         Assertions.assertThat(animal).isInstanceOf(Cat.class);
         Assertions.assertThat(animal.getSpecies()).isEqualTo("Tiger");
     }
+
+    @Test
+    public void testMapTigerToJson() throws JsonProcessingException {
+        final Cat tiger = new Cat();
+        tiger.setSpecies("Tiger");
+        tiger.setName("Tigger");
+        tiger.color("yellow with stripes");
+
+        final String s = mapper.writeValueAsString(tiger);
+        Assertions.assertThat(s).contains("\"species\":\"Tiger\"");
+    }
 }
